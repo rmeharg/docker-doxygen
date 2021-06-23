@@ -1,0 +1,19 @@
+FROM ubuntu:20.04
+MAINTAINER ryanmeharg@gmail.com
+
+ARG http_proxy
+ARG https_proxy
+ARG no_proxy
+
+RUN export http_proxy=$http_proxy && export https_proxy=$https_proxy && no_proxy=$no_proxy \
+  && export HTTP_PROXY=$http_proxy && export HTTPS_PROXY=$https_proxy && export NO_PROXY=$no_proxy \
+  && apt-get update \
+  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends doxygen graphviz git \
+  && apt-get autoremove -y \
+  && apt-get clean -y \
+  && rm -rf /var/lib/apt/lists/* \
+  && unset http_proxy && unset https_proxy && unset no_proxy \
+  && unset HTTP_PROXY && unset HTTPS_PROXY && unset NO_PROXY
+
+WORKDIR /data
+VOLUME ["/data"]
